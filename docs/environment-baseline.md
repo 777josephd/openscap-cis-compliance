@@ -12,6 +12,11 @@ were applied.
 <img width="1728" height="491" alt="SystemIdentity" src="https://github.com/user-attachments/assets/06bcfa83-c570-486d-8304-b7d4b5bb52fb" />
 
 
+## Operating System
+
+<img width="1728" height="320" alt="OSVersion" src="https://github.com/user-attachments/assets/213a2c57-b7c2-46c0-b29e-4d8fc24b53e8" />
+
+
 ## Hardware Profile
 
 | Component | Details |
@@ -21,6 +26,11 @@ were applied.
 | RAM | Allocated GB |
 | Storage | 20GB local-lvm |
 | Network | SOC VLAN |
+
+## Running Services
+
+<img width="1728" height="457" alt="Services" src="https://github.com/user-attachments/assets/f5655236-146c-4279-a7b0-905232c21eb5" />
+
 
 ## Network Configuration
 
