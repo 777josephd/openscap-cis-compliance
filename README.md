@@ -1,9 +1,10 @@
 # CIS Ubuntu 24.04 LTS Compliance Automation Lab
 
 ![Score](https://img.shields.io/badge/CIS%20Compliance-90.89%25-brightgreen)
-![Profile](https://img.shields.io/badge/Profile-CIS%20Level%201%20Server-blue)
-![Tools](https://img.shields.io/badge/Tools-OpenSCAP%20%7C%20Ansible-orange)
-
+![OS](https://img.shields.io/badge/OS-Ubuntu%2024.04%20LTS-orange)
+![Benchmark](https://img.shields.io/badge/Benchmark-CIS%20Level%201%20Server-blue)
+![Scanner](https://img.shields.io/badge/Scanner-OpenSCAP-red)
+![Automation](https://img.shields.io/badge/Automation-Ansible-black)
 ## Overview
 
 This project demonstrates a full compliance engineering lifecycle — 
@@ -215,7 +216,7 @@ openscap-cis-compliance-lab/
 └── ansible/
     ├── inventory.ini
     ├── site.yml
-    └── roles/
+    └── roles
 ```
 
 ## References
