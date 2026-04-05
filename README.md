@@ -211,8 +211,13 @@ openscap-cis-compliance-lab/
 │   ├── pam_configurations.md
 │   ├── sysctl_hardening.conf
 │   └── ufw_rules.md
-├── reports/
-│   └── [scan reports]
+├── screenshots/
+│   ├── baseline
+│   ├── network
+│   ├── pam
+│   ├── results
+│   ├── ssh
+│   └── apparmor
 └── ansible/
     ├── inventory.ini
     ├── site.yml
