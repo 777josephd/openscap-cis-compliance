@@ -1,0 +1,27 @@
+# Category 9: Mandatory Access Control
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 1.6
+
+- name: Install AppArmor utilities
+  ansible.builtin.apt:
+    name: apparmor-utils
+    state: present
+
+- name: Enable AppArmor in bootloader configuration
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX='
+    line: 'GRUB_CMDLINE_LINUX="apparmor=1 security=apparmor"'
+    state: present
+  notify: Update grub
+
+- name: Enforce all AppArmor profiles
+  ansible.builtin.command:
+    cmd: aa-enforce /etc/apparmor.d/
+  changed_when: false
+  ignore_errors: yes
+
+- name: Ensure AppArmor service is enabled and running
+  ansible.builtin.systemd:
+    name: apparmor
+    state: started
+    enabled: true
