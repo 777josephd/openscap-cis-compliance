@@ -1,0 +1,8 @@
+- name: CIS Ubuntu 24.04 LTS Level 1 Server Hardening
+  hosts: compliance_targets
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+
+  roles:
+    - remediate_cis
