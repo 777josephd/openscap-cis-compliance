@@ -1,0 +1,18 @@
+# Category 10: Logging Configuration
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 4
+
+- name: Configure journald to forward to rsyslog
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/journald.conf
+    regexp: '^#?ForwardToSyslog'
+    line: 'ForwardToSyslog=yes'
+    state: present
+  notify: Restart journald
+
+- name: Configure systemd-timesyncd NTP servers
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/timesyncd.conf
+    regexp: '^#?NTP='
+    line: 'NTP=pool.ntp.org'
+    state: present
+  notify: Restart timesyncd
