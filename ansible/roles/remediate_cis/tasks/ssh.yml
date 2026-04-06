@@ -1,0 +1,165 @@
+# Category 2: SSH Hardening
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 5.2
+
+- name: Set PermitRootLogin to no
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+  notify: Restart ssh
+
+- name: Set PermitEmptyPasswords to no
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*PermitEmptyPasswords'
+    line: 'PermitEmptyPasswords no'
+    state: present
+  notify: Restart ssh
+
+- name: Set LoginGraceTime
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*LoginGraceTime'
+    line: 'LoginGraceTime {{ ssh_login_grace_time }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set MaxAuthTries
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*MaxAuthTries'
+    line: 'MaxAuthTries {{ ssh_max_auth_tries }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set MaxSessions
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*MaxSessions'
+    line: 'MaxSessions {{ ssh_max_sessions }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set ClientAliveInterval
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*ClientAliveInterval'
+    line: 'ClientAliveInterval {{ ssh_client_alive_interval }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set ClientAliveCountMax
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*ClientAliveCountMax'
+    line: 'ClientAliveCountMax {{ ssh_client_alive_count_max }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set MaxStartups
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*MaxStartups'
+    line: 'MaxStartups {{ ssh_max_startups }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set HostbasedAuthentication to no
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*HostbasedAuthentication'
+    line: 'HostbasedAuthentication no'
+    state: present
+  notify: Restart ssh
+
+- name: Set IgnoreRhosts to yes
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*IgnoreRhosts'
+    line: 'IgnoreRhosts yes'
+    state: present
+  notify: Restart ssh
+
+- name: Set PermitUserEnvironment to no
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*PermitUserEnvironment'
+    line: 'PermitUserEnvironment no'
+    state: present
+  notify: Restart ssh
+
+- name: Set Banner path
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*Banner'
+    line: 'Banner {{ ssh_banner_path }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set LogLevel to INFO
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*LogLevel'
+    line: 'LogLevel {{ ssh_log_level }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set AllowUsers
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^.*AllowUsers'
+    line: 'AllowUsers {{ ssh_allowed_users }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set MACs
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^MACs'
+    line: 'MACs {{ ssh_macs }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set Ciphers
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Ciphers'
+    line: 'Ciphers {{ ssh_ciphers }}'
+    state: present
+  notify: Restart ssh
+
+- name: Set KexAlgorithms
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^KexAlgorithms'
+    line: 'KexAlgorithms {{ ssh_kex_algorithms }}'
+    state: present
+  notify: Restart ssh
+
+- name: Create SSH warning banner
+  ansible.builtin.copy:
+    src: issue.net
+    dest: /etc/issue.net
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Set sshd_config permissions to 0600
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Remove nullok from common-auth
+  ansible.builtin.replace:
+    path: /etc/pam.d/common-auth
+    regexp: 'pam_unix\.so nullok'
+    replace: 'pam_unix.so'
+
+- name: Remove nullok from common-password
+  ansible.builtin.replace:
+    path: /etc/pam.d/common-password
+    regexp: 'pam_unix\.so nullok'
+    replace: 'pam_unix.so'
