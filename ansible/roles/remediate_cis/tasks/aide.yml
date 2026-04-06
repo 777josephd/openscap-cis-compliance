@@ -1,0 +1,28 @@
+# Category 8: File Integrity Monitoring
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 1.3
+# Note: AIDE initialization should be run after all hardening
+# is complete to capture the clean hardened baseline
+
+- name: Install AIDE packages
+  ansible.builtin.apt:
+    name:
+      - aide
+      - aide-common
+    state: present
+
+- name: Check if AIDE database exists
+  ansible.builtin.stat:
+    path: /var/lib/aide/aide.db
+  register: aide_db
+
+- name: Initialize AIDE database
+  ansible.builtin.command:
+    cmd: aideinit
+  when: not aide_db.stat.exists
+  changed_when: true
+
+- name: Move AIDE database to active location
+  ansible.builtin.command:
+    cmd: mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+  when: not aide_db.stat.exists
+  changed_when: true
