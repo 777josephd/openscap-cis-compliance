@@ -1,0 +1,95 @@
+# Category 6: System Hardening
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 1.5
+
+- name: Disable USB storage module
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/usb-storage.conf
+    content: |
+      install usb-storage /bin/false
+      blacklist usb-storage
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable cramfs filesystem
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/cramfs.conf
+    content: |
+      install cramfs /bin/false
+      blacklist cramfs
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable freevxfs filesystem
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/freevxfs.conf
+    content: |
+      install freevxfs /bin/false
+      blacklist freevxfs
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable hfs filesystem
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/hfs.conf
+    content: |
+      install hfs /bin/false
+      blacklist hfs
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable hfsplus filesystem
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/hfsplus.conf
+    content: |
+      install hfsplus /bin/false
+      blacklist hfsplus
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable jffs2 filesystem
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/jffs2.conf
+    content: |
+      install jffs2 /bin/false
+      blacklist jffs2
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure /dev/shm with secure mount options
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^tmpfs\s+/dev/shm'
+    line: 'tmpfs /dev/shm tmpfs defaults,nodev,nosuid,noexec 0 0'
+    state: present
+
+- name: Remount /dev/shm with secure options
+  ansible.builtin.command:
+    cmd: mount -o remount,nodev,nosuid,noexec /dev/shm
+  changed_when: false
+
+- name: Disable core dumps for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^\*\s+hard\s+core'
+    line: '* hard core 0'
+    state: present
+
+- name: Disable Apport service
+  ansible.builtin.systemd:
+    name: apport
+    state: stopped
+    enabled: false
+    masked: true
+
+- name: Disable rsyncd service
+  ansible.builtin.systemd:
+    name: rsync
+    state: stopped
+    enabled: false
+  ignore_errors: yes
