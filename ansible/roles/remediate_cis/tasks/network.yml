@@ -1,0 +1,40 @@
+# Category 4: Network and Kernel Parameters
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 3
+
+- name: Deploy CIS sysctl hardening configuration
+  ansible.builtin.template:
+    src: 99-cis-hardening.conf.j2
+    dest: /etc/sysctl.d/99-cis-hardening.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Apply sysctl
+
+- name: Set net.ipv6.conf.all.accept_source_route in sysctl.conf
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    regexp: '^.*net.ipv6.conf.all.accept_source_route'
+    line: 'net.ipv6.conf.all.accept_source_route = 0'
+    state: present
+  notify: Apply sysctl
+
+- name: Set net.ipv6.conf.default.accept_source_route in sysctl.conf
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    regexp: '^.*net.ipv6.conf.default.accept_source_route'
+    line: 'net.ipv6.conf.default.accept_source_route = 0'
+    state: present
+  notify: Apply sysctl
+
+- name: Set net.ipv4.conf.all.accept_source_route in sysctl.conf
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    regexp: '^.*net.ipv4.conf.all.accept_source_route'
+    line: 'net.ipv4.conf.all.accept_source_route = 0'
+    state: present
+  notify: Apply sysctl
+
+- name: Apply sysctl settings immediately
+  ansible.builtin.command:
+    cmd: sysctl --system
+  changed_when: false
