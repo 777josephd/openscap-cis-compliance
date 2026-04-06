@@ -1,0 +1,32 @@
+# CIS Ubuntu 24.04 LTS Level 1 Server - Remediation Tasks
+# Executed in order - do not reorder categories
+
+- name: Category 1 - Package Management
+  ansible.builtin.import_tasks: packages.yml
+
+- name: Category 2 - SSH Hardening
+  ansible.builtin.import_tasks: ssh.yml
+
+- name: Category 3 - Authentication and Password Policy
+  ansible.builtin.import_tasks: pam.yml
+
+- name: Category 4 - Network and Kernel Parameters
+  ansible.builtin.import_tasks: network.yml
+
+- name: Category 5 - Firewall
+  ansible.builtin.import_tasks: firewall.yml
+
+- name: Category 6 - System Hardening
+  ansible.builtin.import_tasks: system.yml
+
+- name: Category 7 - File Permissions and Access Controls
+  ansible.builtin.import_tasks: filesystem.yml
+
+- name: Category 8 - AIDE
+  ansible.builtin.import_tasks: aide.yml
+
+- name: Category 9 - AppArmor
+  ansible.builtin.import_tasks: apparmor.yml
+
+- name: Category 10 - Logging
+  ansible.builtin.import_tasks: logging.yml
