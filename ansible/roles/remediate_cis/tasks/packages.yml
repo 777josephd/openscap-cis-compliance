@@ -1,0 +1,15 @@
+# Category 1: Package Management
+# Remove unnecessary packages that increase attack surface
+
+- name: Remove unnecessary packages
+  ansible.builtin.apt:
+    name:
+      - rsync
+      - ftp
+      - tnftp
+      - telnet
+    state: absent
+    purge: yes
+  tags:
+    - packages
+    - cis_level1
