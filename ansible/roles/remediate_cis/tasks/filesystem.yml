@@ -1,0 +1,124 @@
+# Category 7: File Permissions and Access Controls
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 5.1 and 6
+
+- name: Set UMASK in login.defs
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '^UMASK'
+    line: 'UMASK		027'
+    state: present
+
+- name: Set umask in bash.bashrc
+  ansible.builtin.lineinfile:
+    path: /etc/bash.bashrc
+    regexp: '^umask'
+    line: 'umask 027'
+    state: present
+
+- name: Set umask in /etc/profile
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: '^umask'
+    line: 'umask 027'
+    state: present
+
+- name: Create session timeout profile script
+  ansible.builtin.copy:
+    dest: /etc/profile.d/timeout.sh
+    content: |
+      TMOUT={{ session_timeout }}
+      readonly TMOUT
+      export TMOUT
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Set crontab permissions
+  ansible.builtin.file:
+    path: /etc/crontab
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Set cron.d permissions
+  ansible.builtin.file:
+    path: /etc/cron.d
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Set cron.daily permissions
+  ansible.builtin.file:
+    path: /etc/cron.daily
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Set cron.hourly permissions
+  ansible.builtin.file:
+    path: /etc/cron.hourly
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Set cron.monthly permissions
+  ansible.builtin.file:
+    path: /etc/cron.monthly
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Set cron.weekly permissions
+  ansible.builtin.file:
+    path: /etc/cron.weekly
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Create /etc/cron.allow
+  ansible.builtin.file:
+    path: /etc/cron.allow
+    owner: root
+    group: crontab
+    mode: '0640'
+    state: touch
+
+- name: Create /etc/at.allow
+  ansible.builtin.file:
+    path: /etc/at.allow
+    owner: root
+    group: root
+    mode: '0640'
+    state: touch
+
+- name: Create sudo logfile configuration
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/cis-sudo-logfile
+    content: |
+      Defaults logfile="/var/log/sudo.log"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: visudo -cf %s
+
+- name: Create sudo re-authentication configuration
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/cis-sudo-timeout
+    content: |
+      Defaults timestamp_timeout=0
+    owner: root
+    group: root
+    mode: '0440'
+    validate: visudo -cf %s
+
+- name: Set correct permissions on /var/log files
+  ansible.builtin.command:
+    cmd: find /var/log -type f -exec chmod g-wx,o-rwx {} \;
+  changed_when: false
+
+- name: Set correct ownership on /var/log
+  ansible.builtin.file:
+    path: /var/log
+    owner: root
+    group: syslog
+    mode: '0775'
