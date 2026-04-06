@@ -1,0 +1,51 @@
+# CIS Ubuntu 24.04 LTS Level 1 Server Benchmark Variables
+
+# SSH Settings
+ssh_login_grace_time: 60
+ssh_max_auth_tries: 4
+ssh_max_sessions: 10
+ssh_client_alive_interval: 15
+ssh_client_alive_count_max: 3
+ssh_max_startups: "10:30:60"
+ssh_log_level: "INFO"
+ssh_allowed_users: "merlin"
+ssh_banner_path: "/etc/issue.net"
+ssh_banner_text: "Authorized users only. All activity may be monitored and reported."
+ssh_macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256"
+ssh_ciphers: "chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com"
+ssh_kex_algorithms: "sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256"
+
+# PAM - faillock
+pam_faillock_deny: 4
+pam_faillock_fail_interval: 900
+pam_faillock_unlock_time: 900
+
+# PAM - pwquality
+pam_pwquality_minlen: 14
+pam_pwquality_minclass: 4
+pam_pwquality_dcredit: -1
+pam_pwquality_ucredit: -1
+pam_pwquality_lcredit: -1
+pam_pwquality_ocredit: -1
+pam_pwquality_maxrepeat: 3
+pam_pwquality_maxsequence: 3
+pam_pwquality_difok: 2
+pam_pwquality_dictcheck: 1
+pam_pwquality_enforcing: 1
+
+# PAM - pwhistory
+pam_pwhistory_remember: 24
+
+# Password Policy
+pass_max_days: 365
+pass_min_days: 1
+pass_warn_age: 7
+pass_inactive: 45
+
+# Session
+session_timeout: 900
+
+# Faillock
+faillock_deny: 4
+faillock_fail_interval: 900
+faillock_unlock_time: 900
