@@ -1,0 +1,47 @@
+# Category 5: Firewall Configuration
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 3.5
+# ufw selected as firewall framework
+# nftables findings documented as justified exceptions
+
+- name: Install ufw
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Allow SSH before enabling firewall
+  community.general.ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+
+- name: Set default incoming policy to deny
+  community.general.ufw:
+    default: deny
+    direction: incoming
+
+- name: Set default outgoing policy to allow
+  community.general.ufw:
+    default: allow
+    direction: outgoing
+
+- name: Allow loopback interface incoming
+  community.general.ufw:
+    rule: allow
+    interface: lo
+    direction: in
+
+- name: Deny incoming from loopback network IPv4
+  community.general.ufw:
+    rule: deny
+    src: 127.0.0.0/8
+    direction: in
+
+- name: Deny incoming from loopback network IPv6
+  community.general.ufw:
+    rule: deny
+    src: '::1'
+    direction: in
+
+- name: Enable ufw
+  community.general.ufw:
+    state: enabled
