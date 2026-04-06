@@ -26,3 +26,9 @@
 
 <img width="1641" height="571" alt="oscap-g4" src="https://github.com/user-attachments/assets/0204d14c-bd25-41ab-b64c-178310219b15" />
 
+---
+
+## Final (Ansible)
+
+<img width="1164" height="405" alt="final-report" src="https://github.com/user-attachments/assets/81090e28-93b6-483a-9a09-c0d44725d660" />
+
