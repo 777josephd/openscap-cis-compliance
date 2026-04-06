@@ -50,7 +50,7 @@ node, enabling repeatable deployment across any Ubuntu 24.04 LTS target.
 | Scan | Pass | Fail | Score | Change |
 |---|---|---|---|---|
 | Baseline | 233 | 110 | ~69% | — |
-| Post-1: SSH + Authentication | 272 | 83 | 73.01% | +5.01% |
+| Post-1: SSH + Authentication | 272 | 83 | 73.01% | +4.01% |
 | Post-2: Network + Firewall | 291 | 64 | 75.81% | +2.80% |
 | Post-3: System Hardening | 321 | 36 | 88.26% | +12.45% |
 | Post-4: PAM Fixes | 324 | 33 | 90.89% | +2.63% |
