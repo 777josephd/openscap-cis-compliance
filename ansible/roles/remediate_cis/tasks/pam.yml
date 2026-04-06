@@ -1,0 +1,202 @@
+# Category 3: Authentication and Password Policy
+# CIS Ubuntu 24.04 LTS Level 1 Server - Section 5.3 and 5.4
+
+- name: Install libpam-pwquality
+  ansible.builtin.apt:
+    name: libpam-pwquality
+    state: present
+
+- name: Set PASS_MAX_DAYS
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '^PASS_MAX_DAYS'
+    line: 'PASS_MAX_DAYS {{ pass_max_days }}'
+    state: present
+
+- name: Set PASS_MIN_DAYS
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '^PASS_MIN_DAYS'
+    line: 'PASS_MIN_DAYS {{ pass_min_days }}'
+    state: present
+
+- name: Set PASS_WARN_AGE
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '^PASS_WARN_AGE'
+    line: 'PASS_WARN_AGE {{ pass_warn_age }}'
+    state: present
+
+- name: Set INACTIVE in useradd defaults
+  ansible.builtin.lineinfile:
+    path: /etc/default/useradd
+    regexp: '^.*INACTIVE'
+    line: 'INACTIVE={{ pass_inactive }}'
+    state: present
+
+- name: Set pwquality minlen
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*minlen'
+    line: 'minlen = {{ pam_pwquality_minlen }}'
+    state: present
+
+- name: Set pwquality minclass
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*minclass'
+    line: 'minclass = {{ pam_pwquality_minclass }}'
+    state: present
+
+- name: Set pwquality dcredit
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*dcredit'
+    line: 'dcredit = {{ pam_pwquality_dcredit }}'
+    state: present
+
+- name: Set pwquality ucredit
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*ucredit'
+    line: 'ucredit = {{ pam_pwquality_ucredit }}'
+    state: present
+
+- name: Set pwquality lcredit
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*lcredit'
+    line: 'lcredit = {{ pam_pwquality_lcredit }}'
+    state: present
+
+- name: Set pwquality ocredit
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*ocredit'
+    line: 'ocredit = {{ pam_pwquality_ocredit }}'
+    state: present
+
+- name: Set pwquality maxrepeat
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*maxrepeat'
+    line: 'maxrepeat = {{ pam_pwquality_maxrepeat }}'
+    state: present
+
+- name: Set pwquality maxsequence
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*maxsequence'
+    line: 'maxsequence = {{ pam_pwquality_maxsequence }}'
+    state: present
+
+- name: Set pwquality difok
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*difok'
+    line: 'difok = {{ pam_pwquality_difok }}'
+    state: present
+
+- name: Set pwquality dictcheck
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*dictcheck'
+    line: 'dictcheck = {{ pam_pwquality_dictcheck }}'
+    state: present
+
+- name: Set pwquality enforcing
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*enforcing'
+    line: 'enforcing = {{ pam_pwquality_enforcing }}'
+    state: present
+
+- name: Set pwquality enforce_for_root
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: '^#?\s*enforce_for_root'
+    line: 'enforce_for_root'
+    state: present
+
+- name: Set faillock deny
+  ansible.builtin.lineinfile:
+    path: /etc/security/faillock.conf
+    regexp: '^\s*deny\s*='
+    line: 'deny = {{ pam_faillock_deny }}'
+    state: present
+
+- name: Set faillock fail_interval
+  ansible.builtin.lineinfile:
+    path: /etc/security/faillock.conf
+    regexp: '^\s*fail_interval\s*='
+    line: 'fail_interval = {{ pam_faillock_fail_interval }}'
+    state: present
+
+- name: Set faillock unlock_time
+  ansible.builtin.lineinfile:
+    path: /etc/security/faillock.conf
+    regexp: '^\s*unlock_time\s*='
+    line: 'unlock_time = {{ pam_faillock_unlock_time }}'
+    state: present
+
+- name: Deploy cac_faillock pam-config
+  ansible.builtin.copy:
+    src: cac_faillock
+    dest: /usr/share/pam-configs/cac_faillock
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Run pam-auth-update
+
+- name: Deploy cac_faillock_notify pam-config
+  ansible.builtin.copy:
+    src: cac_faillock_notify
+    dest: /usr/share/pam-configs/cac_faillock_notify
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Run pam-auth-update
+
+- name: Deploy cac_pwhistory pam-config
+  ansible.builtin.copy:
+    src: cac_pwhistory
+    dest: /usr/share/pam-configs/cac_pwhistory
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Run pam-auth-update
+
+- name: Remove nullok from common-auth
+  ansible.builtin.replace:
+    path: /etc/pam.d/common-auth
+    regexp: 'pam_unix\.so nullok'
+    replace: 'pam_unix.so'
+
+- name: Remove nullok from common-password
+  ansible.builtin.replace:
+    path: /etc/pam.d/common-password
+    regexp: 'pam_unix\.so nullok'
+    replace: 'pam_unix.so'
+
+- name: Set password maximum age for existing users
+  ansible.builtin.command:
+    cmd: chage -M {{ pass_max_days }} merlin
+  changed_when: false
+
+- name: Create sugroup for su restriction
+  ansible.builtin.group:
+    name: sugroup
+    state: present
+
+- name: Ensure sugroup is empty
+  ansible.builtin.command:
+    cmd: gpasswd -M '' sugroup
+  changed_when: false
+
+- name: Configure pam_wheel for su restriction
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/su
+    regexp: '^auth.*pam_wheel\.so'
+    line: 'auth required pam_wheel.so use_uid group=sugroup'
+    insertafter: '^auth.*pam_rootok\.so'
+    state: present
